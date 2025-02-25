@@ -306,3 +306,81 @@ output "ip_elastica" {
 }
 ```
 Con lo cual nuestro archivo frontend se debe ver de la siguiente manera
+
+Una vez hecho esto tenemos que hacer un par de ajustes, en nuestra terminal de visual studio code
+Primero intalaremos terraform desde su pagina oficial, cullo link es: https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli  
+
+En la seccion "Install Terraform" seleccionamos la opcion linux > amazon linux  
+
+imagen
+
+Instalamos yum-config-manager al repositorio con el comando
+```
+sudo yum install -y yum-utils
+```
+Añadimos hasiCorp a nuestro repositorio  
+```
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+```
+Y por ultimo instalamos terraform
+```
+sudo yum -y install terraform
+```
+
+Una vez hecho esto y antes de usar cualquier comando terraform tenemos que cambiar las credenciales de amazom web services, las credenciales siempre cambian cada vez que encendemos el laboratorio de amazon, para cambiar las credenciales haremos lo siguiente:
+- nos vamos al lanzamiento del laboratorio y le hacemos click en AWS details
+- En AWS CLI le hacemos click a show
+Una vez hagamos eso copiamos todo el texto largo que nos aparece, entonces nos vamos a la terminal de visual studio y hacemos lo siguiente:
+
+![imagen](./img/b1.png)
+![imagen](./img/b2.png)
+![imagen](./img/b3.png)
+
+Para encontrar el archivo de las credenciales y escribir en el escribimos
+```
+nano /home/ubuntu/.aws/credentials
+```
+- Nos aparecerán las credenciales antiguas, las borramos enteras
+- pegamos las credenciales nuevas
+- pulsamos ctrl + o para guardar los cambios, enter para confirmar, ctrl x para salir del archivo
+
+![imagen](./img/b4.png)
+![imagen](./img/b5.png)
+![imagen](./img/b6.png)
+![imagen](./img/b7.png)
+
+Una vez hecho esto ya podemos usar los comandos de terraform
+
+Para crear las instancias con los comandos de terraform primero instalaremos los pugins de terraform con el comando  
+```
+terraform init
+```
+Formatearemos el archivo con el comando  
+```
+terraform fmt
+```
+Comprovaremos que la sintaxis de los archivos que hemos creado es valida con  
+```
+terraform validate
+```
+Por ultimo aplicaremos los cambios necesarios para crear nuestra instancia, pero antes de aplicar cambios podemos ver que cambios que va a realizar terraform con el comando  
+```
+terraform plan
+```
+Para aplicar los cambios de forma automatica (de manera que no tengamos que confirmarlo a mano) usaremos el comando  
+```
+terraform apply -auto-approve
+```
+Si queremos confirmarlo manualmente usaremos  
+```
+terraform apply
+```
+Por ultimo, tambien podemos destruir el recurso con el comando  
+```
+terraform destroy
+```
+
+![imagen](./img/3.png)
+![imagen](./img/4.png)
+![imagen](./img/5.png)
+
