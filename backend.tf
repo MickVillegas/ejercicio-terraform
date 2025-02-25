@@ -1,3 +1,7 @@
+provider "aws" {
+  region = var.region
+}
+
 # Creamos un grupo de seguridad
 resource "aws_security_group" "sg_backend" {
   name        = var.sg_name_back
