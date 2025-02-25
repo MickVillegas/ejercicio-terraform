@@ -36,7 +36,30 @@ Aqui le estamos diciendo que el nombre de la variable es "region" y que:
 - le pasamos el valor que guarda la variable en "default" el cual es el norte de virginia
 Para crear una variable siempre se usa ese patrón.
 
-Siguiendo con backend.tf la siguiente instruccion es el rol de grupo de seguriodad, usamos dos, uno de ingreso y otro de respuestadonde le decimos lo siguiente:
+Acontinuacion creamos el grupo de seguridad de la instancia 
+```
+resource "aws_security_group" "sg_backend" {
+  name        = var.sg_name_back
+  description = var.sg_description_back
+}
+```
+Aquí indicamos cual es el nombre del grupo de seguridad en "name" y cual es su descripcion en "description", las variables usadas aqui son las siguientes
+```
+variable "sg_name_back" {
+  description = "Nombre del grupo de seguridad"
+  type        = string
+  default     = "sg_backend"
+}
+```
+Aquí indicamos el nombre del grupo de seguridad y en la siguiente variable indicamos la descripcion del grupo de seguridad:
+```
+variable "sg_description_back" {
+  description = "Descripción del grupo de seguridad"
+  type        = string
+  default     = "Grupo de seguridad para la instancia backend"
+}
+```
+Siguiendo con backend.tf la siguiente instruccion es el rol de grupo de seguriodad que cumple, usamos dos, uno de ingreso y otro de respuestadonde le decimos lo siguiente:
 ```
 resource "aws_security_group_rule" "ingress" {
   security_group_id = aws_security_group.sg_backend.id
@@ -49,7 +72,7 @@ resource "aws_security_group_rule" "ingress" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 ```
-Aqui le estamos diciendo que el nombre de la variable que crea el rol de los grupos de seguridad se llama "ingress", que el tipo es de ingreso, que el tipo de protocolo es tcp y que está expuesto a todos los puertos, en "count" asta "to_port" pasa lo siguiente, si te fijas ñe estamos pasando variables con un index, y es que en el archivo de variables hemos creado lo siguiente
+Aqui le estamos diciendo que el nombre de la variable que crea el rol de los grupos de seguridad se llama "ingress", que el tipo es de ingreso, ademas en "security_group_id" le deciomos la id del grupo de seguridad que hemos creado anteriormente asignandole "aws_security_group.sg_backend.id", id coje literalmente la id del grupo de seguridad, que el tipo de protocolo es tcp y que está expuesto a todos los puertos, en "count" asta "to_port" pasa lo siguiente, si te fijas ñe estamos pasando variables con un index, y es que en el archivo de variables hemos creado lo siguiente
 ```
 variable "allowed_ingress_ports_back" {
   description = "Puertos de entrada del grupo de seguridad"
@@ -63,6 +86,7 @@ El tipo de variable es una lista cullo valor guarda una lista de datos, entonces
 - from_port  va a recorrer desde el primer puerto de la lista
 - to_port es el ultimo elemento dfe la lista
 - var.allowed_ingress_ports_back[count.index] esd el index actual de la lista, o mejor dico el puerto actual que se encuentra en el index actual de la lista
+- En este caso el unico puerto es el 3386
 
 Despues dfe este recurso creamos el siguiente que son las reglas de salida: 
 ```
@@ -76,8 +100,9 @@ resource "aws_security_group_rule" "egress" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 ```
+Es casi identico al recurso de las reglas de  entrada solo que en el tipo de rol le asignamos "egress" para indicar que es de salida
 
-El siguiente recurso es la ami que utiliza la instancia el cual es el siguiente
+El siguiente recurso es la creacion de la maquina virtual, el cual es el siguiente
 ```
 resource "aws_instance" "backend" {
   ami             = var.ami_id_back
@@ -95,6 +120,7 @@ Aqui indicamos que el tipo de recurso es aws_instance y que se llama backend, en
 - decimos el tipo de instancia
 - le damos el nombre de la key
 - y mostramos cual es el grupo de seguridad que hemos creado en la instancia el cual se indica con [aws_security_group.sg_backend.name] donde sg_backend es literalmente el nombre del recurso del gurupo de seguridad que hemos creado antes, .name coje el nombre
+En tag creamos una etiqueta al cual le pasamos el nombre de la instancia
 
 Las variables que hemos creado para este recurso son los siguientes 
 ```
@@ -271,3 +297,4 @@ output "ip_elastica" {
   value = aws_eip.f.public_ip
 }
 ```
+Con lo cual nuestro archivo frontend se debe ver de la siguiente manera
