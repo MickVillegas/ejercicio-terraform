@@ -3,8 +3,8 @@
 En este ejercicio usaremos terraform para hacer uns infraestructura backend y frontend, para ello he creado tres archivos con extension tf llamadas:
 - frontend.tf
 - backend.tf
-- variables.tf
-tabto frontend.tf y backend.tf usan una estructuracion similar, ya que se dividen en "estructuras" que indican el recurso que utilizan, cada recurso tiene un tipo de dato que va a guardar que son:
+- variables.tf  
+Tanto frontend.tf y backend.tf usan una estructuracion similar, ya que se dividen en "estructuras" que indican el recurso que utilizan, cada recurso tiene un tipo de dato que va a guardar que son:
 - crear un grupo de seguridad
 - crear un rol de grupo de seguridad
 - crear una instancia
@@ -130,8 +130,14 @@ variable "ami_id_back" {
   default     = "ami-04b4f1a9cf54c11d0"
 }
 ```
-Para ponerle el nombre de la ami he hecho lo siguiente
-imagenes
+Para ponerle el nombre de la ami he hecho lo siguiente:
+- He ido a amazon web service, he ido a mis instancias y he pulsado el boton amarillo "lanzar instancias"
+  ![imagen](./img/a1.png)
+- Dewspues he seleccionado en imagenes de aplicaciones la imagen de ubuntu
+ ![imagen](./img/a2.png)
+- Despues he copiado la ID de AMI
+  ![imagen](./img/a3.png)
+- Y la he copiado en la variable ami_id_back en el valor por defecto 'default = "ami-04b4f1a9cf54c11d0"'
 ```
 variable "instance_type_back" {
   description = "Tipo de instancia"
