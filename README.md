@@ -49,4 +49,17 @@ resource "aws_security_group_rule" "ingress" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 ```
-Aqui le estamos diciendo que el nombre de la variable que crea el rol de los grupos de seguridad se llama "ingress", que el tipo es de ingreso, que el tipo de protocolo es tcp y que está expuesto a todos los puertos
+Aqui le estamos diciendo que el nombre de la variable que crea el rol de los grupos de seguridad se llama "ingress", que el tipo es de ingreso, que el tipo de protocolo es tcp y que está expuesto a todos los puertos, en "count" asta "to_port" pasa lo siguiente, si te fijas ñe estamos pasando variables con un index, y es que en el archivo de variables hemos creado lo siguiente
+```
+variable "allowed_ingress_ports_back" {
+  description = "Puertos de entrada del grupo de seguridad"
+  type        = list(number)
+  default     = [3386]
+}
+```
+El tipo de variable es una lista cullo valor guarda una lista de datos, entonces podemos comprender que el recurso está recorriendo cada dato de la lista como si de un for se tratara donde:
+- count crea multibles instancias segun el numero de elementos de la lista
+- ength(var.allowed_ingress_ports_back) es la longitud de la lista
+- from_port  va a recorrer desde el primer puerto de la lista
+- to_port es el ultimo elemento dfe la lista
+- var.allowed_ingress_ports_back[count.index] esd el index actual de la lista, o mejor dico el puerto actual que se encuentra en el index actual de la lista
