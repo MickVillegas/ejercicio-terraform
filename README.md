@@ -3,7 +3,10 @@
 En este ejercicio usaremos terraform para hacer uns infraestructura backend y frontend, para ello he creado tres archivos con extension tf llamadas:
 - frontend.tf
 - backend.tf
-- variables.tf  
+- variables.tf
+
+El archivo variables.tf tiene todas las variables que usaran tanto el archivo frontend.tf como el archivo backend.tf  
+
 Tanto frontend.tf y backend.tf usan una estructuracion similar, ya que se dividen en "estructuras" que indican el recurso que utilizan, cada recurso tiene un tipo de dato que va a guardar que son:
 - crear un grupo de seguridad
 - crear un rol de grupo de seguridad
@@ -182,8 +185,15 @@ output "elastic_ip" {
 ```
 Por ultimo mostramos la ip publica de la instancia 
 
-con lo cual El archivo backend.tf deberia verse asi
-imagenes
+con lo cual el archivo backend.tf deberia verse asi
+
+![imagen](./img/e1.png)
+![imagen](./img/e2.png)
+
+Y sus variables en el archivo variables.tf deberian verse asi  
+
+![imagen](./img/e7.png)
+![imagen](./img/e8.png)
 
 
 ## Archivo frontend.tf
@@ -309,7 +319,16 @@ output "ip_elastica" {
   value = aws_eip.f.public_ip
 }
 ```
-Con lo cual nuestro archivo frontend se debe ver de la siguiente manera
+Con lo cual nuestro archivo frontend se debe ver de la siguiente manera  
+
+![imagen](./img/e3.png)
+![imagen](./img/e4.png)
+
+Y sus variables en el archivo variables.tf deberian verse asi  
+
+![imagen](./img/e5.png)
+![imagen](./img/e6.png)
+
 
 ## Instalacion de terraform, cambio de credenciales AWS, comandos basicos
 
