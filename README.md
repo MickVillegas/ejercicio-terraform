@@ -174,7 +174,7 @@ resource "aws_eip" "b" {
 }
 ```
 En este recurso creamos la ip elastica indicandole quie la instancia a la que la vamos a asociar es a backend, el .id coge la id de la instancia
-# Mostramos la IP pública de la instancia
+Mostramos la IP pública de la instancia
 ```
 output "elastic_ip" {
   value = aws_eip.b.public_ip
