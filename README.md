@@ -150,3 +150,124 @@ con lo cual El archivo backend.tf deberia verse asi
 imagenes
 
 
+El mismo patrón seguimos para el archivofrontend.tf
+Primwero configuramos el provedor de amazon web services indicando la region del mismo, aquí de hecho reutilizamos la variable "var.region" usada en el archivo anterior
+```
+provider "aws" {
+  region = var.region
+}
+```
+despues creamos el grupo de seguridad donde indicamos el nombre del grupo de seguridad, su descripcion, etc
+```
+resource "aws_security_group" "sg_fontend" {
+  name        = var.sg_name_front
+  description = var.sg_description_front
+}
+```
+culla variables usadas son 
+```
+variable "sg_name_front" {
+  description = "Nombre del grupo de seguridad"
+  type        = string
+  default     = "sg_fontend"
+}
+```
+para el nombre del grupo de seguridad y para la descripcion usamos la variable siguiente:
+```
+variable "sg_description_front" {
+  description = "Descripción del grupo de seguridad"
+  type        = string
+  default     = "Grupo de seguridad para la instancia frontend"
+}
+```
+A continuacion creamos el recurso para crear las reglas de entrada de la instancia
+```
+resource "aws_security_group_rule" "ingreso" {
+  security_group_id = aws_security_group.sg_fontend.id
+  type              = "ingress"
+
+  count       = length(var.allowed_ingress_ports_front)
+  from_port   = var.allowed_ingress_ports_front[count.index]
+  to_port     = var.allowed_ingress_ports_front[count.index]
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+```
+Y culla lista de puertos es 
+```
+variable "allowed_ingress_ports_front" {
+  description = "Puertos de entrada del grupo de seguridad"
+  type        = list(number)
+  default     = [22, 80, 443]
+}
+```
+Esta vez los puertos de estrada son el 22, 2l 80 y el 443.
+
+Despues creamos las reglas de salida del grupo de seguridad.
+```
+resource "aws_security_group_rule" "salida" {
+  security_group_id = aws_security_group.sg_fontend.id
+  type              = "egress"
+
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+```
+Despues damos a paso a crear la maquina virtual
+```
+resource "aws_instance" "frontend" {
+  ami             = var.ami_id_front
+  instance_type   = var.instance_type_front
+  key_name        = var.key_name_front
+  security_groups = [aws_security_group.sg_fontend.name]
+
+  tags = {
+    Name = var.instance_name_front
+  }
+}
+```
+
+Culla variables son 
+```
+variable "ami_id_front" {
+  description = "Identificador de la AMI"
+  type        = string
+  default     = "ami-00874d747dde814fa"
+}
+```
+Para el nombre de la ami
+```
+variable "instance_type_front" {
+  description = "Tipo de instancia"
+  type        = string
+  default     = "t2.small"
+}
+```
+Para el tipo de instancia
+```
+variable "key_name_front" {
+  description = "Nombre de la clave pública"
+  type        = string
+  default     = "vockey"
+}
+```
+Para las llaves
+```
+variable "instance_name_front" {
+  description = "Nombre de la instancia"
+  type        = string
+  default     = "frontend"
+}
+```
+Por ultimo creamos la ip elastica y la asociamos a la instancia
+```
+resource "aws_eip" "f" {
+  instance = aws_instance.frontend.id
+}
+
+output "ip_elastica" {
+  value = aws_eip.f.public_ip
+}
+```
