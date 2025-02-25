@@ -63,3 +63,90 @@ El tipo de variable es una lista cullo valor guarda una lista de datos, entonces
 - from_port  va a recorrer desde el primer puerto de la lista
 - to_port es el ultimo elemento dfe la lista
 - var.allowed_ingress_ports_back[count.index] esd el index actual de la lista, o mejor dico el puerto actual que se encuentra en el index actual de la lista
+
+Despues dfe este recurso creamos el siguiente que son las reglas de salida: 
+```
+resource "aws_security_group_rule" "egress" {
+  security_group_id = aws_security_group.sg_backend.id
+  type              = "egress"
+
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+```
+
+El siguiente recurso es la ami que utiliza la instancia el cual es el siguiente
+```
+resource "aws_instance" "backend" {
+  ami             = var.ami_id_back
+  instance_type   = var.instance_type_back
+  key_name        = var.key_name_back
+  security_groups = [aws_security_group.sg_backend.name]
+
+  tags = {
+    Name = var.instance_name_back
+  }
+}
+```
+Aqui indicamos que el tipo de recurso es aws_instance y que se llama backend, en el:
+- indicamos la ami de la instancia con ami
+- decimos el tipo de instancia
+- le damos el nombre de la key
+- y mostramos cual es el grupo de seguridad que hemos creado en la instancia el cual se indica con [aws_security_group.sg_backend.name] donde sg_backend es literalmente el nombre del recurso del gurupo de seguridad que hemos creado antes, .name coje el nombre
+
+Las variables que hemos creado para este recurso son los siguientes 
+```
+variable "ami_id_back" {
+  description = "Identificador de la AMI"
+  type        = string
+  default     = "ami-04b4f1a9cf54c11d0"
+}
+```
+Para ponerle el nombre de la ami he hecho lo siguiente
+imagenes
+```
+variable "instance_type_back" {
+  description = "Tipo de instancia"
+  type        = string
+  default     = "t2.medium"
+}
+```
+Esta variable guarda el tipo de instancia, en este caso vamos a crear uno t2.medium
+```
+variable "key_name_back" {
+  description = "Nombre de la clave pública"
+  type        = string
+  default     = "vockey"
+}
+```
+Aquí seleccionamos el par de claves de la instancia, en este caso es vockey
+```
+variable "instance_name_back" {
+  description = "Nombre de la instancia"
+  type        = string
+  default     = "backend"
+}
+```
+Esta variable guarda el nombre de la instancia, en este caso lo vamos a llamar backend
+
+Por ultimo en nuestro archivo backend.tf vamos a crear dos recursos para crear una ip elastica y para asociarlo a nuestra instancia, lo hacemos de la siguiente manera
+```
+resource "aws_eip" "b" {
+  instance = aws_instance.backend.id
+}
+```
+En este recurso creamos la ip elastica indicandole quie la instancia a la que la vamos a asociar es a backend, el .id coge la id de la instancia
+# Mostramos la IP pública de la instancia
+```
+output "elastic_ip" {
+  value = aws_eip.b.public_ip
+}
+```
+Por ultimo mostramos la ip publica de la instancia 
+
+con lo cual El archivo backend.tf deberia verse asi
+imagenes
+
+
