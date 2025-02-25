@@ -131,13 +131,13 @@ variable "ami_id_back" {
 }
 ```
 Para ponerle el nombre de la ami he hecho lo siguiente:
-- He ido a amazon web service, he ido a mis instancias y he pulsado el boton amarillo "lanzar instancias"
+- He ido a amazon web service, he ido a mis instancias y he pulsado el boton amarillo "lanzar instancias"  
   ![imagen](./img/a1.png)
-- Dewspues he seleccionado en imagenes de aplicaciones la imagen de ubuntu
+- Dewspues he seleccionado en imagenes de aplicaciones la imagen de ubuntu  
  ![imagen](./img/a2.png)
-- Despues he copiado la ID de AMI
+- Despues he copiado la ID de AMI  
   ![imagen](./img/a3.png)
-- Y la he copiado en la variable ami_id_back en el valor por defecto 'default = "ami-04b4f1a9cf54c11d0"'
+- Y la he copiado en la variable ami_id_back en el valor por defecto 'default = "ami-04b4f1a9cf54c11d0"'  
 ```
 variable "instance_type_back" {
   description = "Tipo de instancia"
