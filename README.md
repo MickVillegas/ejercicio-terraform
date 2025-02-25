@@ -16,6 +16,8 @@ Para cada recurso se le pone un nombre unico quew los diferencie de otro recuso 
 Para hacer el proyecto más seguro he almacenado la información que terraform necesita para crear las instancias en variables.tf, asique explicaré un recurso y explicaré sus variables.
 Por ejemplo en el caso de bacjend.tf he hecho lo siguiente:
 
+## Archivo backend.tf
+
 Primero decimops que el proovedor es amazon web service y culla region es el norte de virginia
 ```
 provider "aws" {
@@ -184,6 +186,8 @@ con lo cual El archivo backend.tf deberia verse asi
 imagenes
 
 
+## Archivo frontend.tf
+
 El mismo patrón seguimos para el archivofrontend.tf
 Primwero configuramos el provedor de amazon web services indicando la region del mismo, aquí de hecho reutilizamos la variable "var.region" usada en el archivo anterior
 ```
@@ -307,12 +311,14 @@ output "ip_elastica" {
 ```
 Con lo cual nuestro archivo frontend se debe ver de la siguiente manera
 
+## Instalacion de terraform, cambio de credenciales AWS, comandos basicos
+
 Una vez hecho esto tenemos que hacer un par de ajustes, en nuestra terminal de visual studio code
 Primero intalaremos terraform desde su pagina oficial, cullo link es: https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli  
 
 En la seccion "Install Terraform" seleccionamos la opcion linux > amazon linux  
 
-imagen
+![imagen](./img/c1.png)
 
 Instalamos yum-config-manager al repositorio con el comando
 ```
